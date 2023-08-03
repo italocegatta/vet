@@ -25,6 +25,28 @@
       <ul class="nav navbar-nav"><li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/ex1_caso_deterministico.html">Caso determinístico</a>
+    </li>
+    <li>
+      <a href="../articles/ex2_incerteza_preco.html">Incerteza no preço da madeira</a>
+    </li>
+    <li>
+      <a href="../articles/ex3_incerteza_custo_producao_dependencia.html">Incerteza do custo de formação e produção com dependência</a>
+    </li>
+    <li>
+      <a href="../articles/incerteza_uma_variavel.html">Efeito da incerteza de uma variável de estado no VET</a>
+    </li>
+    <li>
+      <a href="../articles/vet_variaveis_isoladas.html">VET e variáveis isoladas</a>
+    </li>
+  </ul></li>
       </ul><ul class="nav navbar-nav navbar-right"></ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -44,7 +66,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vet</span><span class="op">(</span><span class="va">taxa</span>, <span class="va">custo_formacao</span>, <span class="va">preco_madeira</span>, <span class="va">producao</span>, <span class="va">ciclo</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">vet</span><span class="op">(</span><span class="va">taxa</span>, <span class="va">rotacao</span>, <span class="va">vp_custo</span>, <span class="va">producao</span>, <span class="va">preco_madeira</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -53,20 +75,20 @@
 <dd><p>Numeric. Taxa de desconto na forma decimal</p></dd>
 
 
-<dt>custo_formacao</dt>
+<dt>rotacao</dt>
+<dd><p>Numeric. Idade do ciclo</p></dd>
+
+
+<dt>vp_custo</dt>
 <dd><p>Numeric. Valor presente do custo de formacao</p></dd>
-
-
-<dt>preco_madeira</dt>
-<dd><p>Numeric. Preco de venda da madeira em pé</p></dd>
 
 
 <dt>producao</dt>
 <dd><p>Numeric. Producao de madeira no fim do ciclo</p></dd>
 
 
-<dt>ciclo</dt>
-<dd><p>Numeric. Idade do ciclo</p></dd>
+<dt>preco_madeira</dt>
+<dd><p>Numeric. Preco de venda da madeira em pé</p></dd>
 
 </dl></div>
 

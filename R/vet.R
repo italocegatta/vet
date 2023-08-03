@@ -3,22 +3,18 @@
 #' Convenient function to save charts in Eps format.
 #'
 #' @param taxa Numeric. Taxa de desconto na forma decimal
-#' @param custo_formacao Numeric. Valor presente do custo de formacao
-#' @param preco_madeira Numeric. Preco de venda da madeira em pé
+#' @param rotacao Numeric. Idade do ciclo
+#' @param vp_custo Numeric. Valor presente do custo de formacao
 #' @param producao Numeric. Producao de madeira no fim do ciclo
-#' @param ciclo Numeric. Idade do ciclo
+#' @param preco_madeira Numeric. Preco de venda da madeira em pé
 #'
 #' @export
 #'
-vet <- function(taxa, custo_formacao, preco_madeira, producao, ciclo) {
+vet <- function(taxa, rotacao, vp_custo, producao, preco_madeira) {
 
-  vec_receita_vpl <- (preco_madeira * producao) / (1 + taxa)^ciclo
+  vp_receita <- (preco_madeira * producao) / (1 + taxa)^rotacao
+  vpl <- vp_receita - vp_custo
+  vet = (vpl * (1 + taxa)^rotacao) / ((1 + taxa)^rotacao - 1)
 
-  # valor presente liquido
-  vec_vpl <- vec_receita_vpl - custo_formacao
-
-  # valor esperado da terra
-  vec_vet <- (vec_vpl * (1 + taxa)^ciclo) / ((1 + taxa)^ciclo - 1)
-
-  vec_vet
+  vet
 }

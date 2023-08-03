@@ -30,9 +30,9 @@ convert_param_skew <- function(x) {
 
 # Setup -------------------------------------------------------------------
 
-N = 10000
-
 set.seed(123)
+
+N = 10000
 
 
 # Custo de produção -------------------------------------------------------
@@ -121,6 +121,7 @@ tab_producao <- tibble(
   group_by(cd_distribuicao) |>
   mutate(vl_amostra = ajusta_extremos(vl_amostra, lst_param_producao$min, lst_param_producao$max)) |>
   ungroup()
+
 
 # Preço da madeira ------------------------------------------------------
 
@@ -293,3 +294,8 @@ ggsave(
   plt_scatter_custo_producao_correlacao_var,
   width = 16, height = 5
 )
+
+
+# Salva tabela -------------------------------------------------------------
+
+usethis::use_data(tab_amostra_independente, tab_amostra_dependente, overwrite = TRUE)

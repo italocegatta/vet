@@ -4,18 +4,18 @@
 \alias{vet}
 \title{Calcula o Valor Esperado da Terra}
 \usage{
-vet(taxa, custo_formacao, preco_madeira, producao, ciclo)
+vet(taxa, rotacao, vp_custo, producao, preco_madeira)
 }
 \arguments{
 \item{taxa}{Numeric. Taxa de desconto na forma decimal}
 
-\item{custo_formacao}{Numeric. Valor presente do custo de formacao}
+\item{rotacao}{Numeric. Idade do ciclo}
 
-\item{preco_madeira}{Numeric. Preco de venda da madeira em pé}
+\item{vp_custo}{Numeric. Valor presente do custo de formacao}
 
 \item{producao}{Numeric. Producao de madeira no fim do ciclo}
 
-\item{ciclo}{Numeric. Idade do ciclo}
+\item{preco_madeira}{Numeric. Preco de venda da madeira em pé}
 }
 \description{
 Convenient function to save charts in Eps format.
