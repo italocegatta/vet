@@ -4,6 +4,9 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/dependencia_custo_producao.html</loc>
+  </url>
+  <url>
     <loc>/articles/ex1_caso_deterministico.html</loc>
   </url>
   <url>
@@ -17,6 +20,9 @@
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/relacao_distribuicao_dependencia.html</loc>
   </url>
   <url>
     <loc>/articles/vet_variaveis_isoladas.html</loc>

@@ -2,10 +2,12 @@ pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  dependencia_custo_producao: dependencia_custo_producao.html
   ex1_caso_deterministico: ex1_caso_deterministico.html
   ex2_incerteza_preco: ex2_incerteza_preco.html
   ex3_incerteza_custo_producao_dependencia: ex3_incerteza_custo_producao_dependencia.html
   incerteza_uma_variavel: incerteza_uma_variavel.html
+  relacao_distribuicao_dependencia: relacao_distribuicao_dependencia.html
   vet_variaveis_isoladas: vet_variaveis_isoladas.html
-last_built: 2023-08-03T11:02Z
+last_built: 2023-08-14T14:04Z
 
