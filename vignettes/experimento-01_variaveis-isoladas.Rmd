@@ -1,0 +1,184 @@
+---
+title: "VET e variáveis isoladas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{VET e variáveis isoladas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vet)
+library(dplyr)
+library(ggplot2)
+library(forcats)
+library(patchwork)
+library(gridExtra)
+library(scales)
+library(grid)
+```
+
+```{r}
+CUSTO = 12000
+
+lst_param_custo <- list(
+  min = CUSTO * 0.5,
+  max = CUSTO * 1.5,
+  mean = CUSTO,
+  sd = CUSTO * 0.2,
+  skew = 0.7
+)
+
+PRODUCAO = 240
+
+lst_param_producao <- list(
+  min = PRODUCAO * 0.5,
+  max = PRODUCAO * 1.5,
+  mean = PRODUCAO,
+  sd = PRODUCAO * 0.2,
+  skew = 0.7
+)
+
+PRECO = 150
+
+lst_param_preco <- list(
+  min = PRECO * 0.5,
+  max = PRECO * 1.5,
+  mean = PRECO,
+  sd = PRECO * 0.2,
+  skew = 0.7
+)
+```
+
+
+```{r}
+N_MAX = 10000
+i = 1
+vec_taxa <- c(0.05, 0.10, 0.15)
+vec_custo_along <- seq(lst_param_custo$min, lst_param_custo$max, length.out = N_MAX)
+vec_producao_along <- seq(lst_param_producao$min, lst_param_producao$max, length.out = N_MAX)
+vec_preco_along <- seq(lst_param_preco$min, lst_param_preco$max, length.out = N_MAX)
+
+lst_vet_curva <- vector("list", length(vec_taxa))
+
+for (i in seq_along(vec_taxa)) {
+
+  vec_vet_custo_curva <- vet(
+    taxa = vec_taxa[i], rotacao = 6,
+    vp_custo = vec_custo_along,
+    producao = lst_param_producao$mean,
+    preco_madeira = lst_param_preco$mean
+  )
+
+  vec_vet_producao_curva <- vet(
+    taxa = vec_taxa[i], rotacao = 6,
+    vp_custo = lst_param_custo$mean,
+    producao = vec_producao_along,
+    preco_madeira = lst_param_preco$mean
+  )
+
+  vec_vet_preco_curva <- vet(
+    taxa = vec_taxa[i], rotacao = 6,
+    vp_custo = lst_param_custo$mean,
+    producao = lst_param_producao$mean,
+    preco_madeira = vec_preco_along
+  )
+
+  lst_vet_curva[[i]] <- bind_rows(
+    tibble(tipo = "Custo", taxa = vec_taxa[i], valor = vec_custo_along, vet = vec_vet_custo_curva),
+    tibble(tipo = "Produção", taxa = vec_taxa[i], valor = vec_producao_along, vet = vec_vet_producao_curva),
+    tibble(tipo = "Preço", taxa = vec_taxa[i], valor = vec_preco_along, vet = vec_vet_preco_curva)
+  )
+
+}
+
+vet_curva <- bind_rows(lst_vet_curva) |> 
+  mutate(taxa = as_factor(label_percent()(taxa)))
+```
+
+```{r}
+plt_custo_vet_taxa <- vet_curva |> 
+  filter(tipo == "Custo") |> 
+  ggplot(aes(valor, vet, color = taxa)) +
+    geom_hline(yintercept = 0, alpha = 0.8) +
+    geom_line(linewidth = 0.7) +
+    labs(
+      x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
+      y = NULL,
+      color = "Taxa de desconto",
+      #tag = "A"
+    ) +
+    scale_x_continuous(breaks = seq(0, 20000, 3000)) +
+    theme_bw(7) +
+    theme(axis.text = element_text(color = "black"))
+
+plt_producao_vet_taxa <- vet_curva |> 
+  filter(tipo == "Produção") |> 
+  ggplot(aes(valor, vet, color = taxa)) +
+    geom_hline(yintercept = 0, alpha = 0.8) +
+    geom_line(linewidth = 0.7) +
+    labs(
+      x = expression(Produção~de~madeira~(m^3~ha^-1)),
+      y = NULL,
+      color = "Taxa de desconto",
+      #tag = "B"
+    ) +
+    scale_x_continuous(breaks = seq(0, 500, 50)) +
+    theme_bw(7) +
+    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.text.x = element_text(color = "black"))
+
+plt_preco_vet_taxa <- vet_curva |> 
+  filter(tipo == "Preço") |> 
+  ggplot(aes(valor, vet, color = taxa)) +
+    geom_hline(yintercept = 0, alpha = 0.8) +
+    geom_line(linewidth = 0.7) +
+    labs(
+      x = expression(paste("Preço da madeira ", "(R$ ", "m"^"-3", ")")),
+      y = NULL,
+      color = "Taxa de desconto",
+      #tag = "C"
+    ) +
+    scale_x_continuous(breaks = seq(0, 500, 30)) +
+    theme_bw(7) +
+    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.text.x = element_text(color = "black"))
+```
+
+
+```{r}
+#| label: fig-line-var-vet-taxa
+#| fig-width: 5
+#| fig-height: 2
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Relação variável estado e VET"
+#| 
+
+{plt_custo_vet_taxa +
+  plt_producao_vet_taxa +
+  plt_preco_vet_taxa +
+  plot_layout(guides = 'collect') &
+  scale_y_continuous(
+    breaks = seq(-20000, 200000, 20000), 
+    labels = label_number_auto(), limits = range(vet_curva$vet)
+  ) &
+  theme(legend.position = "top", legend.justification = "left", legend.box.spacing = unit(0, "pt")) &
+  scale_color_brewer(palette = "Set2") &
+  guides(color = guide_legend(override.aes = list(linewidth =2)))
+  } |> 
+  patchworkGrob() |>
+  grid.arrange(
+    left = grid.text(
+      expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
+      rot = 90, gp = gpar(fontsize = 8)
+    )
+  )
+```
+
+

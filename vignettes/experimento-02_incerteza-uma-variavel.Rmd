@@ -1,0 +1,205 @@
+---
+title: "Efeito da incerteza de uma variável de estado no VET"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Efeito da incerteza de uma variável de estado no VET}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vet)
+library(dplyr)
+library(tidyr)
+library(ggridges)
+library(ggplot2)
+library(patchwork)
+library(gridExtra)
+library(scales)
+```
+
+```{r}
+CUSTO = 12000
+
+lst_param_custo <- list(
+  min = CUSTO * 0.5,
+  max = CUSTO * 1.5,
+  mean = CUSTO,
+  sd = CUSTO * 0.2,
+  skew = 0.7
+)
+
+PRODUCAO = 240
+
+lst_param_producao <- list(
+  min = PRODUCAO * 0.5,
+  max = PRODUCAO * 1.5,
+  mean = PRODUCAO,
+  sd = PRODUCAO * 0.2,
+  skew = 0.7
+)
+
+PRECO = 150
+
+lst_param_preco <- list(
+  min = PRECO * 0.5,
+  max = PRECO * 1.5,
+  mean = PRECO,
+  sd = PRECO * 0.2,
+  skew = 0.7
+)
+```
+
+
+```{r}
+# tab_amostra_independente |> 
+#   filter(cd_var == "custo") |> 
+#   select(cd_distribuicao, vl_amostra) |> 
+#   mutate(
+#     vet = vet(
+#       preco_madeira = lst_param_preco$mean,
+#       taxa = 0.08, rotacao = 6,
+#       vp_custo = vl_amostra, 
+#       producao = lst_param_producao$mean
+#     )
+#   ) |> 
+#   gather('nm_key', 'vl_key', -cd_distribuicao) |> 
+#   ggplot(aes(vl_key)) +
+#     geom_density() +
+#     facet_grid(cd_distribuicao~nm_key, scales = "free_x") +
+#     theme_bw()
+```
+
+```{r}
+vec_aux_limits <- c(-10000, 70000)
+```
+
+```{r}
+tab_vet_custo <- tab_amostra_independente |> 
+  filter(cd_var == "custo") |> 
+  select(cd_distribuicao, custo = vl_amostra) |> 
+  mutate(
+    vet = vet(
+      preco_madeira = lst_param_preco$mean,
+      taxa = 0.08, rotacao = 6,
+      vp_custo = custo, 
+      producao = lst_param_producao$mean
+    )
+  )
+
+plt_ridge_custo_dist <- tab_vet_custo |> 
+  ggplot(aes(custo, cd_distribuicao)) +
+    stat_density_ridges(quantile_lines = TRUE, quantiles = c(0.15, 0.5, 0.85), alpha = 0.7, size = 0.2) +
+    labs(
+      x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
+      y = NULL
+    ) +
+    scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto())
+
+plt_ridge_custo_vet_dist <- tab_vet_custo |> 
+  ggplot(aes(vet, cd_distribuicao)) +
+    stat_density_ridges(quantile_lines = TRUE, quantiles = c(0.15, 0.5, 0.85), alpha = 0.7, size = 0.2) +
+    labs(
+      x = expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
+      y = NULL
+    ) +
+    scale_x_continuous(breaks = seq(-10000, 100000, 20000), limits = vec_aux_limits, labels = label_number_auto())
+```
+
+```{r}
+tab_vet_producao <- tab_amostra_independente |> 
+  filter(cd_var == "producao") |> 
+  select(cd_distribuicao, producao = vl_amostra) |> 
+  mutate(
+    vet = vet(
+      preco_madeira = lst_param_preco$mean,
+      taxa = 0.08, rotacao = 6,
+      vp_custo = lst_param_custo$mean, 
+      producao = producao
+    )
+  )
+
+plt_ridge_producao_dist <- tab_vet_producao |> 
+  ggplot(aes(producao, cd_distribuicao)) +
+    stat_density_ridges(quantile_lines = TRUE, quantiles = c(0.15, 0.5, 0.85), alpha = 0.7, size = 0.2) +
+    labs(
+      x = expression(Produção~de~madeira~(m^3~ha^-1)), 
+      y = NULL
+    ) +
+    scale_x_continuous(breaks = seq(40, 500, 50))
+
+plt_ridge_producao_vet_dist <- tab_vet_producao |> 
+  ggplot(aes(vet, cd_distribuicao)) +
+    stat_density_ridges(quantile_lines = TRUE, quantiles = c(0.15, 0.5, 0.85), alpha = 0.7, size = 0.2) +
+    labs(
+      x = expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
+      y = NULL
+    ) +
+    scale_x_continuous(breaks = seq(-10000, 100000, 20000), limits = vec_aux_limits, labels = label_number_auto())
+```
+
+```{r}
+tab_vet_preco <- tab_amostra_independente |> 
+  filter(cd_var == "preco") |> 
+  select(cd_distribuicao, preco = vl_amostra) |> 
+  mutate(
+    vet = vet(
+      taxa = 0.08, rotacao = 6,
+      vp_custo = lst_param_custo$mean, 
+      producao = lst_param_producao$mean,
+      preco_madeira = preco
+    )
+  )
+
+plt_ridge_preco_dist <- tab_vet_preco |> 
+  ggplot(aes(preco, cd_distribuicao)) +
+    stat_density_ridges(quantile_lines = TRUE, quantiles = c(0.15, 0.5, 0.85), alpha = 0.7, size = 0.2) +
+    labs(
+      x = expression(paste("Preço da madeira ", "(R$ ", "m"^"-3", ")")), 
+      y = NULL
+    ) +
+    scale_x_continuous(breaks = seq(0, 500, 30))
+
+plt_ridge_preco_vet_dist <- tab_vet_preco |> 
+  ggplot(aes(vet, cd_distribuicao)) +
+    stat_density_ridges(quantile_lines = TRUE, quantiles = c(0.15, 0.5, 0.85), alpha = 0.7, size = 0.2) +
+    labs(
+      x = expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
+      y = NULL
+    ) +
+    scale_x_continuous(breaks = seq(-10000, 100000, 20000), limits = vec_aux_limits, labels = label_number_auto())
+```
+
+```{r}
+#| label: fig-rigde-var-dist-vet
+#| fig-width: 5
+#| fig-height: 6
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Distribuição de probabilidade"
+
+
+{((plt_ridge_custo_dist + plt_ridge_custo_vet_dist) /
+  (plt_ridge_producao_dist + plt_ridge_producao_vet_dist) /
+  (plt_ridge_preco_dist + plt_ridge_preco_vet_dist)) &
+  scale_y_discrete(
+    labels = c("unif" = "UNIF", "sn_pos" = "SN POS", "sn_neg" = "SN NEG", "norm" = "NORM"),
+    expand = expansion(mult = c(0, .4))
+  ) &
+  theme_bw(9) &
+  theme(
+      text = element_text(color = "black"),
+      axis.text = element_text(color = "black")
+    )
+  } |> 
+  patchworkGrob() |>
+  grid.arrange(left = "Distribuição de probabilidade")
+```
+

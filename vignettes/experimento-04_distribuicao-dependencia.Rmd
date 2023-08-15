@@ -1,0 +1,46 @@
+---
+title: "Relação dentre distrbuição e dependência"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Relação dentre distrbuição e dependência}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(vet)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+
+```{r}
+tab_plot <- tab_amostra_dependente |> 
+  filter(as.character(vl_correlacao) %in% c("0.3", "0.7")) |> 
+  filter(cd_marginais %in% c("unif - unif", "norm - norm", "sn_pos - sn_pos", "sn_neg - sn_neg")) |> 
+  group_by(cd_var, cd_marginais) |>
+  mutate(id = row_number()) |>
+  ungroup() |>
+  select(-nm_var) |>
+  spread(cd_var, vl_amostra) 
+
+tab_plot |> 
+  ggplot(aes(custo , producao)) +
+  geom_density2d_filled(
+    aes(fill = after_stat(level)),
+    contour_var = "ndensity",
+    breaks = seq(0.1, 1.0, length.out = 10)
+  ) +
+  #geom_point(alpha = 0.05) +
+  facet_grid(vl_correlacao~cd_marginais) +
+  scale_fill_viridis_d('Percentil', labels = scales::percent(seq(0.1, 1, 0.1))) +
+  theme_bw()
+```
+

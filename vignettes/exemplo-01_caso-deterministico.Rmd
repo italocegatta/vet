@@ -1,0 +1,57 @@
+---
+title: "Caso determinístico"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Caso determinístico}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r}
+taxa <- 0.10
+ciclo <- 6
+volume <- 240
+preco_madeira <- 150
+producao <- volume * preco_madeira
+```
+
+```{r}
+tab_fluxo_caixa <- data.frame(
+    item = c(
+      "Implantação","Manutenção",
+      "Manutenção","Manutenção","Manutenção","Manutenção",
+      "Manutenção","Venda da madeira em pé"
+    ),
+    ano = c(0, 1, 2, 3, 4, 5, 6, 6),
+    valor = c(-10000, -800, -500, -200, -200, -200, -200, producao)
+  ) |>
+  transform(valor_presente = (valor) / ((1 + taxa)^ano))
+
+tab_fluxo_caixa
+```
+
+```{r}
+valor_presente_liquido = sum(tab_fluxo_caixa$valor_presente)
+
+valor_presente_liquido
+```
+
+```{r}
+valor_esperado_terra <- (valor_presente_liquido * (1 + taxa)^ciclo) / ((1 + taxa)^ciclo - 1)
+
+valor_esperado_terra
+```
+
+```{r}
+valor_arrendamento <- valor_esperado_terra * taxa
+
+valor_arrendamento
+```
+
