@@ -2,6 +2,7 @@ pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  exemplo-00_dados-simulados: exemplo-00_dados-simulados.html
   exemplo-01_caso-deterministico: exemplo-01_caso-deterministico.html
   exemplo-02_incerteza-preco: exemplo-02_incerteza-preco.html
   exemplo-03_incerteza-custo-producao-dependencia: exemplo-03_incerteza-custo-producao-dependencia.html
@@ -9,5 +10,5 @@ articles:
   experimento-02_incerteza-uma-variavel: experimento-02_incerteza-uma-variavel.html
   experimento-03_dependencia-custo-producao: experimento-03_dependencia-custo-producao.html
   experimento-04_distribuicao-dependencia: experimento-04_distribuicao-dependencia.html
-last_built: 2023-08-14T23:15Z
+last_built: 2023-08-16T14:04Z
 
