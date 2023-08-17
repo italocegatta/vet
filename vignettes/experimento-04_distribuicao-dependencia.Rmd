@@ -19,6 +19,9 @@ library(vet)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(stringr)
+library(scales)
+library(patchwork)
 ```
 
 ```{r}
@@ -31,16 +34,67 @@ tab_plot <- tab_amostra_dependente |>
   select(-nm_var) |>
   spread(cd_var, vl_amostra) 
 
-tab_plot |> 
+plt_density <- tab_plot |> 
   ggplot(aes(custo , producao)) +
   geom_density2d_filled(
     aes(fill = after_stat(level)),
-    contour_var = "ndensity",
-    breaks = seq(0.1, 1.0, length.out = 10)
+    alpha = 0.8,
+    contour_var = "ndensity", show.legend = FALSE
   ) +
-  #geom_point(alpha = 0.05) +
-  facet_grid(vl_correlacao~cd_marginais) +
-  scale_fill_viridis_d('Percentil', labels = scales::percent(seq(0.1, 1, 0.1))) +
-  theme_bw()
+  facet_grid(
+    vl_correlacao ~ cd_marginais,
+    labeller = labeller(
+      cd_marginais = \(x) str_to_upper(str_replace_all(x, "_", " ")),
+      vl_correlacao = \(x) paste("Correlação", formatC(as.numeric(x), decimal.mark = ","))
+    )
+  ) +
+  labs(
+    x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
+    y = expression(Produção~de~madeira~(m^3~ha^-1))
+  ) +
+  scale_x_continuous(breaks = seq(0, 30000, 4000), labels = label_number_auto()) +
+  scale_y_continuous(breaks = seq(40, 500, 50)) +
+  #scale_fill_viridis_c('Quantil', labels = percent(seq(0.1, 1, 0.1)), guide = guide_colourbar()) +
+  theme_bw() +
+  theme(
+    text = element_text(color = "black"),
+    axis.text = element_text(color = "black"),
+    legend.position = "top", legend.justification = "left"
+  )
 ```
+
+```{r}
+get_legend <- function(a.gplot){ 
+    tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
+    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+    legend <- tmp$grobs[[leg]] 
+    legend
+} 
+
+plt_legend <- {tibble(x = 1:11, y = seq(0, 1, 0.1)) |> 
+  ggplot(aes(x, y, color = y)) + 
+    geom_point() +
+    theme(legend.position = "top", legend.justification = "left", legend.margin=margin(l = 1.65, unit='cm') ) +
+    scale_color_viridis_c("Densidade   ") +
+    guides(color = guide_colorbar(barwidth = 10, barheight = 1, ticks.colour = "black"))
+  } |> 
+  get_legend()
+```
+
+
+```{r}
+#| label: fig-contour-custo-producao-dist
+#| fig-width: 8
+#| fig-height: 4.5
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Distribuição de probabilidade"
+
+plot_spacer() +
+  plt_legend +
+  plt_density +
+  plot_layout(nrow = 3, heights = c(.001, 0.1, 1))
+```
+
+
 

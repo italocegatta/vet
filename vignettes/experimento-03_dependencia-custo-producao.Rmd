@@ -21,10 +21,10 @@ library(tidyr)
 library(ggridges)
 library(ggplot2)
 library(patchwork)
-```
+library(scales)
+```   
 
 ```{r}
-
 make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", marginal="norm - norm", tag = NULL) {
   
   tab_custo_producao <- .data |> 
@@ -37,50 +37,87 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
 
   plt_hist_custo <- tab_custo_producao |> 
     ggplot(aes(custo)) +
-      geom_histogram(fill = "grey80", color = "black", alpha = 0.8) +
-      labs(x = NULL, y = "Frequência", tag = tag) +
+      geom_histogram(fill = "black", color = "white", alpha = 0.8) +
+      labs(x = NULL, y = "Frequência") +
+      scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
+      scale_y_continuous(breaks = seq(0, 10000, 300), labels = label_number_auto()) +
       theme_bw()
   
   plt_hist_producao <- tab_custo_producao |> 
     ggplot(aes(producao)) +
-      geom_histogram(fill = "grey80", color = "black", alpha = 0.8) +
+      geom_histogram(fill = "black", color = "white", alpha = 0.8) +
       coord_flip() +
       labs(x = NULL, y = "Frequência") +
+      scale_x_continuous(breaks = seq(40, 500, 50)) +
+      scale_y_continuous(breaks = seq(0, 10000, 300), labels = label_number_auto()) +
       theme_bw()
   
   plt_scatter_custo_producao <- tab_custo_producao |> 
     ggplot(aes(custo, producao)) +
-      geom_point(alpha = 0.1) +
-      geom_smooth(method = "lm") +
-      labs(x = "Custo (R$/ha)", y = "Produção (m3/ha)") +
+      geom_point(alpha = 0.07) +
+      #geom_smooth(method = "lm") +
+      labs(
+        x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
+        y = expression(Produção~de~madeira~(m^3~ha^-1))
+      ) +
+      scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
+      scale_y_continuous(breaks = seq(40, 500, 50)) +
       theme_bw()
   
-  wrap_plots(
-    plt_hist_custo, 
-    plot_spacer(), 
-    plt_scatter_custo_producao, 
-    plt_hist_producao, 
-    nrow = 2,
-    widths = c(1, 0.3),
-    heights = c(0.3, 1)
-  )
+  return(list(plt_scatter_custo_producao, plt_hist_custo, plt_hist_producao))
+      
 }
-
-```
-
-```{r, fig.width=7, fig.height=7, dpi=400}
-make_marginal_plot(corr="0.1", marginal="norm - norm")
 ```
 
 
-```{r, fig.width=7, fig.height=7, dpi=400}
-make_marginal_plot(corr="0.7", marginal="norm - norm")
+```{r}
+#| label: fig-scatter-marginal-norm-norm
+#| fig-width: 9
+#| fig-height: 4.5
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Distribuição de probabilidade"
+
+lst_plt_norm_norm_01 <- make_marginal_plot(corr="0.1", marginal="norm - norm")
+lst_plt_norm_norm_07 <- make_marginal_plot(corr="0.7", marginal="norm - norm")
+
+wrap_plots(
+  lst_plt_norm_norm_01[[2]], 
+  plot_spacer(), 
+  lst_plt_norm_norm_07[[2]], 
+  plot_spacer(), 
+  lst_plt_norm_norm_01[[1]], 
+  lst_plt_norm_norm_01[[3]], 
+  lst_plt_norm_norm_07[[1]], 
+  lst_plt_norm_norm_07[[3]], 
+  nrow = 2, ncol = 4,
+  widths = c(1, 0.3, 1, 0.3),
+  heights = c(0.3, 1)
+)
 ```
 
-```{r, fig.width=7, fig.height=7, dpi=400}
-make_marginal_plot(corr="0.1", marginal="unif - unif")
-```
+```{r}
+#| label: fig-scatter-marginal-unif-unif
+#| fig-width: 9
+#| fig-height: 4.5
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Distribuição de probabilidade"
 
-```{r, fig.width=7, fig.height=7, dpi=400}
-make_marginal_plot(corr="0.7", marginal="unif - unif")
+lst_plt_norm_norm_01 <- make_marginal_plot(corr="0.1", marginal="unif - unif")
+lst_plt_norm_norm_07 <- make_marginal_plot(corr="0.7", marginal="unif - unif")
+
+wrap_plots(
+  lst_plt_norm_norm_01[[2]], 
+  plot_spacer(), 
+  lst_plt_norm_norm_07[[2]], 
+  plot_spacer(), 
+  lst_plt_norm_norm_01[[1]], 
+  lst_plt_norm_norm_01[[3]], 
+  lst_plt_norm_norm_07[[1]], 
+  lst_plt_norm_norm_07[[3]], 
+  nrow = 2, ncol = 4,
+  widths = c(1, 0.3, 1, 0.3),
+  heights = c(0.3, 1)
+)
 ```

@@ -2,11 +2,17 @@ Package: vet
 Title: Modelagem do Valor Esperado da Terra
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "Italo",
+    c(person(given = "Italo",
            family = "Cegatta",
            role = c("aut", "cre"),
-           email = "italocegatta@gmail.com")
-Description: What the package does (one paragraph).
+           email = "italocegatta@gmail.com",
+           comment = c(ORCID = "0000-0003-0833-6214")),
+      person(given = "Cristian",
+           family = "Villegas",
+           role = c("aut", "ths"),
+           email = "clobos@usp.br",
+           comment = c(ORCID = "0000-0003-3176-5236")))
+Description: Leitura e analise dos dados do mostrado.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
