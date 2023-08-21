@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 library(vet)
 library(dplyr)
 library(tidyr)
+library(stringr)
 library(ggridges)
 library(ggplot2)
 library(patchwork)
@@ -41,7 +42,11 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
       labs(x = NULL, y = "Frequência") +
       scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
       scale_y_continuous(breaks = seq(0, 10000, 300), labels = label_number_auto()) +
-      theme_bw()
+      theme_bw() +
+      theme(
+        text = element_text(color = "black"),
+        axis.text = element_text(color = "black")
+      )
   
   plt_hist_producao <- tab_custo_producao |> 
     ggplot(aes(producao)) +
@@ -50,7 +55,11 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
       labs(x = NULL, y = "Frequência") +
       scale_x_continuous(breaks = seq(40, 500, 50)) +
       scale_y_continuous(breaks = seq(0, 10000, 300), labels = label_number_auto()) +
-      theme_bw()
+      theme_bw() +
+      theme(
+        text = element_text(color = "black"),
+        axis.text = element_text(color = "black")
+      )
   
   plt_scatter_custo_producao <- tab_custo_producao |> 
     ggplot(aes(custo, producao)) +
@@ -62,13 +71,18 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
       ) +
       scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
       scale_y_continuous(breaks = seq(40, 500, 50)) +
-      theme_bw()
+      theme_bw() +
+      theme(
+        text = element_text(color = "black"),
+        axis.text = element_text(color = "black")
+      )
   
   return(list(plt_scatter_custo_producao, plt_hist_custo, plt_hist_producao))
       
 }
 ```
 
+# Correlação entre marginais
 
 ```{r}
 #| label: fig-scatter-marginal-norm-norm
@@ -121,3 +135,78 @@ wrap_plots(
   heights = c(0.3, 1)
 )
 ```
+
+# Dependencia entre as distribuições
+
+```{r}
+tab_plot <- tab_amostra_dependente |> 
+  filter(as.character(vl_correlacao) %in% c("0.3", "0.7")) |> 
+  filter(cd_marginais %in% c("unif - unif", "norm - norm", "sn_pos - sn_pos", "sn_neg - sn_neg")) |> 
+  group_by(cd_var, cd_marginais) |>
+  mutate(id = row_number()) |>
+  ungroup() |>
+  select(-nm_var) |>
+  spread(cd_var, vl_amostra) 
+
+plt_density <- tab_plot |> 
+  ggplot(aes(custo , producao)) +
+  geom_density2d_filled(
+    aes(fill = after_stat(level)),
+    alpha = 0.8,
+    contour_var = "ndensity", show.legend = FALSE
+  ) +
+  facet_grid(
+    vl_correlacao ~ cd_marginais,
+    labeller = labeller(
+      cd_marginais = \(x) str_to_upper(str_replace_all(x, "_", " ")),
+      vl_correlacao = \(x) paste("Correlação", formatC(as.numeric(x), decimal.mark = ","))
+    )
+  ) +
+  labs(
+    x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
+    y = expression(Produção~de~madeira~(m^3~ha^-1))
+  ) +
+  scale_x_continuous(breaks = seq(0, 30000, 4000), labels = label_number_auto()) +
+  scale_y_continuous(breaks = seq(40, 500, 50)) +
+  #scale_fill_viridis_c('Quantil', labels = percent(seq(0.1, 1, 0.1)), guide = guide_colourbar()) +
+  theme_bw() +
+  theme(
+    text = element_text(color = "black"),
+    axis.text = element_text(color = "black"),
+    legend.position = "top", legend.justification = "left"
+  )
+```
+
+
+```{r}
+get_legend <- function(a.gplot){ 
+    tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
+    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
+    legend <- tmp$grobs[[leg]] 
+    legend
+} 
+
+plt_legend <- {tibble(x = 1:11, y = seq(0, 1, 0.1)) |> 
+  ggplot(aes(x, y, color = y)) + 
+    geom_point() +
+    theme(legend.position = "top", legend.justification = "left", legend.margin=margin(l = 1.65, unit='cm') ) +
+    scale_color_viridis_c("Densidade   ") +
+    guides(color = guide_colorbar(barwidth = 10, barheight = 1, ticks.colour = "black"))
+  } |> 
+  get_legend()
+```
+
+```{r}
+#| label: fig-contour-custo-producao-dist
+#| fig-width: 8
+#| fig-height: 4.5
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Distribuição de probabilidade"
+
+plot_spacer() +
+  plt_legend +
+  plt_density +
+  plot_layout(nrow = 3, heights = c(.001, 0.1, 1))
+```
+

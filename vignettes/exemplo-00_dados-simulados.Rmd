@@ -51,6 +51,8 @@ convert_param_skew <- function(x) {
 set.seed(123)
 
 N = 10000
+TAXA = 0.10
+ROTACAO = 6
 ```
 
 # Custo de produção
@@ -186,18 +188,12 @@ tab_preco <- tibble(
   group_by(cd_distribuicao) |>
   mutate(vl_amostra = ajusta_extremos(vl_amostra, lst_param_preco$min, lst_param_preco$max)) |>
   ungroup()
-```
 
-# Amostras independentes
-
-```{r}
 tab_amostra_independente <- bind_rows(
   tab_custo,
   tab_producao,
   tab_preco
 )
-
-tab_amostra_independente
 ```
 
 # Dependencia entre custo e produção
@@ -218,9 +214,6 @@ lst_distribuicao_param <- list(
 vec_corr <- seq(0.1, 0.9, 0.2)
 
 lst_amostra_dependente <- map(seq_len(nrow(tab_grid_copula)), ~vector("list", length(vec_corr)))
-
-i = 11
-ii = 4
 
 for (i in seq_len(nrow(tab_grid_copula))) {
 
@@ -272,13 +265,124 @@ for (i in seq_len(nrow(tab_grid_copula))) {
   }
 
 }
+
+tab_amostra_dependente <- bind_rows(lst_amostra_dependente)
 ```
 
-# Dados dependentes
+# Valor esperado da terra
+
+## Variáveis independentes
 
 ```{r}
-tab_amostra_dependente <- bind_rows(lst_amostra_dependente)
+vec_aux_dist <- tab_amostra_independente |>
+  distinct(cd_distribuicao) |>
+  pull()
 
+tab_grid_independente <- expand_grid(
+  custo = vec_aux_dist,
+  producao = vec_aux_dist,
+)
+
+lst_vet_independente <- tab_grid_independente %>%
+  mutate(vl_vet = NA)
+
+i = 1
+for (i in seq_len(nrow(tab_grid_independente))) {
+
+  lst_vet_independente$vl_vet[i] <- vet(
+      taxa = TAXA,
+      rotacao = ROTACAO,
+      vp_custo = tab_amostra_independente |>
+        filter(cd_var == "custo", cd_distribuicao == tab_grid_independente$custo[i]) |>
+        pull(vl_amostra),
+      producao = tab_amostra_independente |>
+        filter(cd_var == "producao", cd_distribuicao == tab_grid_independente$producao[i]) |>
+        pull(vl_amostra),
+      preco_madeira = PRECO
+    ) |>
+    list()
+}
+
+tab_vet_independente <- unnest(lst_vet_independente, vl_vet)
+```
+
+## Variáveis dependentes
+
+```{r}
+vec_aux_corr <- c("0.1", "0.3", "0.5", "0.7", "0.9")
+
+tab_grid_dependente <- expand_grid(
+    custo = vec_aux_dist,
+    producao = vec_aux_dist,
+    vl_correlacao = vec_aux_corr
+  ) |>
+  mutate(cd_marginais = paste(custo, producao, sep = " - "))
+
+lst_vet_dependente <- tab_grid_dependente %>%
+  mutate(vl_vet = NA)
+
+i = 1
+for (i in seq_len(nrow(tab_grid_dependente))) {
+
+    lst_vet_dependente$vl_vet[i] <- vet(
+      taxa = TAXA,
+      rotacao = ROTACAO,
+      vp_custo = tab_amostra_dependente |>
+        filter(
+          cd_var == "custo",
+          cd_marginais == tab_grid_dependente$cd_marginais[i],
+          as.character(vl_correlacao) == tab_grid_dependente$vl_correlacao[i]
+        ) |>
+        pull(vl_amostra),
+      producao = tab_amostra_dependente |>
+        filter(
+          cd_var == "producao",
+          cd_marginais == tab_grid_dependente$cd_marginais[i],
+          as.character(vl_correlacao) == tab_grid_dependente$vl_correlacao[i]
+        ) |>
+        pull(vl_amostra),
+      preco_madeira = PRECO
+    ) |>
+    list()
+}
+
+tab_vet_dependente <- unnest(lst_vet_dependente, vl_vet)
+```
+
+```{r}
+tab_amostra_vet_completo <- tab_grid_dependente |>
+  left_join(
+    tab_vet_dependente |>
+      select(-cd_marginais) |>
+      group_nest(custo, producao, vl_correlacao, .key = "data_dependente")
+  ) |>
+  left_join(
+    tab_vet_independente |>
+      group_nest(custo, producao, .key = "data_independente")
+  ) |>
+  mutate(
+    ks_test = map2(data_dependente, data_independente, ~ks.test(.x$vl_vet, .y$vl_vet)),
+    ks_pvalue = map_dbl(ks_test,~.x$p.value),
+    pvalue_sig = ks_pvalue > 0.05,
+    d = map_dbl(ks_test,~.x$statistic)
+  )
+
+tab_amostra_vet <- tab_amostra_vet_completo |>
+  select(-data_dependente, -data_independente, -ks_test)
+```
+
+
+# Dataframes 
+
+```{r}
+tab_amostra_independente
+```
+
+```{r}
 tab_amostra_dependente
+```
+
+```{r}
+tab_amostra_vet
 ```
 

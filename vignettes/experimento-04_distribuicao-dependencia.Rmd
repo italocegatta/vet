@@ -22,79 +22,167 @@ library(ggplot2)
 library(stringr)
 library(scales)
 library(patchwork)
+library(purrr)
+```
+
+
+```{r}
+#| label: fig-dist-dist-d
+#| fig-width: 7
+#| fig-height: 5
+#| out-width: 100%
+#| dpi: 500
+#| fig-cap: "Estatística D do teste Kolmogorov-smornov"
+
+tab_amostra_vet |> 
+  ggplot(aes(custo, producao, size = vl_d, color = bl_siginificativo, shape = bl_siginificativo)) +
+    geom_point(alpha = 0.8) +
+    facet_wrap(
+      ~vl_correlacao, ncol = 2,
+      labeller = labeller(
+        vl_correlacao = \(x) paste("Correlação", formatC(as.numeric(x), decimal.mark = ","))
+      )
+    ) +
+    labs(
+      x = "Distribuição de probabilidade - Custo de formação",
+      y = "Distribuição de probabilidade - Produção de madeira",
+      size = "Estatística D - Teste Kolmogorov-Smirnov"
+    ) +
+    scale_color_manual(values = c("grey20", "darkgreen"), guide = "none") +
+    scale_size_continuous(breaks = seq(0, 1, 0.1), range = c(1.5, 5.5), guide = "none") +
+    scale_shape_discrete(guide = "none") +
+    scale_x_discrete(
+      limits = rev, 
+      labels = c("unif" = "UNIF", "sn_pos" = "SN POS", "sn_neg" = "SN NEG", "norm" = "NORM")
+    ) +
+    scale_y_discrete(
+      labels = c("unif" = "UNIF", "sn_pos" = "SN POS", "sn_neg" = "SN NEG", "norm" = "NORM")
+    ) +
+    theme_bw() +
+    theme(
+      text = element_text(color = "black"),
+      axis.text = element_text(color = "black"),
+      legend.position = c(0.5, 0.15), legend.justification = "left", legend.direction = "horizontal"
+    ) +
+    guides(size = guide_legend(title.position = "top", label.position = "bottom",  override.aes = list(shape = 21)))
+```
+
+
+```{r}
+tab_amostra_vet |> 
+  arrange(-vl_pvalue, vl_d) |>
+  filter(vl_pvalue >= 0.05) |>
+  print(n=80)
 ```
 
 ```{r}
-tab_plot <- tab_amostra_dependente |> 
-  filter(as.character(vl_correlacao) %in% c("0.3", "0.7")) |> 
-  filter(cd_marginais %in% c("unif - unif", "norm - norm", "sn_pos - sn_pos", "sn_neg - sn_neg")) |> 
-  group_by(cd_var, cd_marginais) |>
-  mutate(id = row_number()) |>
-  ungroup() |>
-  select(-nm_var) |>
-  spread(cd_var, vl_amostra) 
+marginal_custo = "sn_pos"
+marginal_producao = "unif"
+correlacao = c("0.1", "0.7")
+titulo = c("A) Correlação = 0,1", "B) Correlação = 0,7")
 
-plt_density <- tab_plot |> 
-  ggplot(aes(custo , producao)) +
-  geom_density2d_filled(
-    aes(fill = after_stat(level)),
-    alpha = 0.8,
-    contour_var = "ndensity", show.legend = FALSE
-  ) +
-  facet_grid(
-    vl_correlacao ~ cd_marginais,
-    labeller = labeller(
-      cd_marginais = \(x) str_to_upper(str_replace_all(x, "_", " ")),
-      vl_correlacao = \(x) paste("Correlação", formatC(as.numeric(x), decimal.mark = ","))
-    )
-  ) +
-  labs(
-    x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
-    y = expression(Produção~de~madeira~(m^3~ha^-1))
-  ) +
-  scale_x_continuous(breaks = seq(0, 30000, 4000), labels = label_number_auto()) +
-  scale_y_continuous(breaks = seq(40, 500, 50)) +
-  #scale_fill_viridis_c('Quantil', labels = percent(seq(0.1, 1, 0.1)), guide = guide_colourbar()) +
-  theme_bw() +
-  theme(
-    text = element_text(color = "black"),
-    axis.text = element_text(color = "black"),
-    legend.position = "top", legend.justification = "left"
+plot_prepare <- function(marginal_custo, marginal_producao, correlacao, titulo = NULL) {
+  
+  tab_amostra_filtro <- bind_rows(
+    tab_amostra_independente |> 
+      filter(
+        (cd_var == "custo" & cd_distribuicao == marginal_custo) |
+        (cd_var == "producao" & cd_distribuicao == marginal_producao)
+      ) |> 
+      mutate(tipo = "Independente"),
+    
+    tab_amostra_dependente |> 
+      filter(
+        cd_marginais == paste(marginal_custo, marginal_producao, sep = " - "),
+        as.character(vl_correlacao) == correlacao
+      ) |> 
+      mutate(tipo = "Dependente")
   )
+  
+  plt_custo_dependencia <- tab_amostra_filtro |> 
+    filter(cd_var == "custo") |> 
+    ggplot(aes(vl_amostra, fill = tipo, color = tipo)) +
+      geom_density(alpha = 0.5) +
+      labs(
+        x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
+        y = "Densidade", fill = "Amostragem", color = "Amostragem", 
+        title = titulo
+      ) +
+      scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
+      theme_bw()
+  
+  plt_producao_dependencia <- tab_amostra_filtro |> 
+    filter(cd_var == "producao") |> 
+    ggplot(aes(vl_amostra, fill = tipo, color = tipo)) +
+      geom_density(alpha = 0.5) +
+      labs(
+        x = expression(Produção~de~madeira~(m^3~ha^-1)), 
+        y = "Densidade", fill = "Amostragem", color = "Amostragem"
+      ) +
+      scale_x_continuous(breaks = seq(40, 500, 50)) +
+      theme_bw() 
+
+  plt_vet <- tab_amostra_vet_completo |> 
+    filter(
+        cd_marginais == paste(marginal_custo, marginal_producao, sep = " - "),
+        as.character(vl_correlacao) == correlacao
+    ) |> 
+    select(starts_with("data")) |> 
+    unnest(cols = c(data_dependente, data_independente)) |> 
+    select(Dependente = 1, Independente = 2) |> 
+    gather(tipo, vet) |> 
+    ggplot(aes(vet, fill = tipo, color = tipo)) +
+      geom_density(alpha = 0.5) +
+      labs(
+        x = expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
+        y = "Densidade", fill = "Amostragem", color = "Amostragem"
+      ) +
+      scale_x_continuous(breaks = seq(-10000, 100000, 20000), labels = label_number_auto()) +
+      theme_bw()
+  
+  list(
+    plt_custo_dependencia,
+    plt_producao_dependencia,
+    plt_vet
+  )
+}
+
+plot_compare <- function(marginal_custo, marginal_producao, correlacao, titulo) {
+  
+  lst_1 <- plot_prepare(marginal_custo, marginal_producao, correlacao[1], titulo[1])
+  
+  lst_2 <- plot_prepare(marginal_custo, marginal_producao, correlacao[2], titulo [2])
+  
+  (guide_area() /
+  ((lst_1[[1]] + lst_2[[1]]) /
+    (lst_1[[2]] + lst_2[[2]]) /
+    ((lst_1[[3]] + lst_2[[3]])))) +
+    plot_layout(guides='collect', heights = c(0.05, 1)) &  #unit(rep(1, 7), c("cm", rep("null", 6)))) &
+    scale_fill_manual(values = c("#d95f02", "#1b9e77")) &
+    scale_color_manual(values = c("#d95f02", "#1b9e77")) &
+    scale_y_continuous(labels = label_number_si()) &
+    theme(
+      legend.position = "top", legend.justification = "left",
+      text = element_text(color = "black"),
+      axis.text = element_text(color = "black")
+    )
+}
 ```
 
-```{r}
-get_legend <- function(a.gplot){ 
-    tmp <- ggplot_gtable(ggplot_build(a.gplot)) 
-    leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box") 
-    legend <- tmp$grobs[[leg]] 
-    legend
-} 
-
-plt_legend <- {tibble(x = 1:11, y = seq(0, 1, 0.1)) |> 
-  ggplot(aes(x, y, color = y)) + 
-    geom_point() +
-    theme(legend.position = "top", legend.justification = "left", legend.margin=margin(l = 1.65, unit='cm') ) +
-    scale_color_viridis_c("Densidade   ") +
-    guides(color = guide_colorbar(barwidth = 10, barheight = 1, ticks.colour = "black"))
-  } |> 
-  get_legend()
-```
-
 
 ```{r}
-#| label: fig-contour-custo-producao-dist
-#| fig-width: 8
-#| fig-height: 4.5
+#| label: fig-density-var-dependence
+#| fig-width: 7
+#| fig-height: 7
 #| out-width: 100%
 #| dpi: 500
 #| fig-cap: "Distribuição de probabilidade"
 
-plot_spacer() +
-  plt_legend +
-  plt_density +
-  plot_layout(nrow = 3, heights = c(.001, 0.1, 1))
+plot_compare(
+  marginal_custo = "sn_pos",
+  marginal_producao = "unif",
+  correlacao = c("0.1", "0.7"),
+  titulo = c("A) Correlação = 0,1", "B) Correlação = 0,7")
+)
 ```
-
-
 
