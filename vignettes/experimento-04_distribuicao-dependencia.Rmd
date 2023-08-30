@@ -26,13 +26,7 @@ library(purrr)
 ```
 
 
-```{r}
-#| label: fig-dist-dist-d
-#| fig-width: 7
-#| fig-height: 5
-#| out-width: 100%
-#| dpi: 500
-#| fig-cap: "Estatística D do teste Kolmogorov-smornov"
+```{r, fig.width=4, fig.height=3, dpi=320}
 
 tab_amostra_vet |> 
   ggplot(aes(custo, producao, size = vl_d, color = bl_siginificativo, shape = bl_siginificativo)) +
@@ -49,7 +43,7 @@ tab_amostra_vet |>
       size = "Estatística D - Teste Kolmogorov-Smirnov"
     ) +
     scale_color_manual(values = c("grey20", "darkgreen"), guide = "none") +
-    scale_size_continuous(breaks = seq(0, 1, 0.1), range = c(1.5, 5.5), guide = "none") +
+    scale_size_continuous(breaks = seq(0, 1, 0.1), range = c(0.5, 2), guide = "none") +
     scale_shape_discrete(guide = "none") +
     scale_x_discrete(
       limits = rev, 
@@ -58,7 +52,7 @@ tab_amostra_vet |>
     scale_y_discrete(
       labels = c("unif" = "UNIF", "sn_pos" = "SN POS", "sn_neg" = "SN NEG", "norm" = "NORM")
     ) +
-    theme_bw() +
+    theme_bw(6) +
     theme(
       text = element_text(color = "black"),
       axis.text = element_text(color = "black"),
@@ -106,10 +100,9 @@ plot_prepare <- function(marginal_custo, marginal_producao, correlacao, titulo =
       labs(
         x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
         y = "Densidade", fill = "Amostragem", color = "Amostragem", 
-        title = titulo
+        subtitle = titulo
       ) +
-      scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
-      theme_bw()
+      scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto())
   
   plt_producao_dependencia <- tab_amostra_filtro |> 
     filter(cd_var == "producao") |> 
@@ -119,8 +112,7 @@ plot_prepare <- function(marginal_custo, marginal_producao, correlacao, titulo =
         x = expression(Produção~de~madeira~(m^3~ha^-1)), 
         y = "Densidade", fill = "Amostragem", color = "Amostragem"
       ) +
-      scale_x_continuous(breaks = seq(40, 500, 50)) +
-      theme_bw() 
+      scale_x_continuous(breaks = seq(40, 500, 50))
 
   plt_vet <- tab_amostra_vet_completo |> 
     filter(
@@ -137,8 +129,7 @@ plot_prepare <- function(marginal_custo, marginal_producao, correlacao, titulo =
         x = expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
         y = "Densidade", fill = "Amostragem", color = "Amostragem"
       ) +
-      scale_x_continuous(breaks = seq(-10000, 100000, 20000), labels = label_number_auto()) +
-      theme_bw()
+      scale_x_continuous(breaks = seq(-10000, 100000, 20000), labels = label_number_auto())
   
   list(
     plt_custo_dependencia,
@@ -151,16 +142,17 @@ plot_compare <- function(marginal_custo, marginal_producao, correlacao, titulo) 
   
   lst_1 <- plot_prepare(marginal_custo, marginal_producao, correlacao[1], titulo[1])
   
-  lst_2 <- plot_prepare(marginal_custo, marginal_producao, correlacao[2], titulo [2])
+  lst_2 <- plot_prepare(marginal_custo, marginal_producao, correlacao[2], titulo[2])
   
   (guide_area() /
   ((lst_1[[1]] + lst_2[[1]]) /
     (lst_1[[2]] + lst_2[[2]]) /
     ((lst_1[[3]] + lst_2[[3]])))) +
-    plot_layout(guides='collect', heights = c(0.05, 1)) &  #unit(rep(1, 7), c("cm", rep("null", 6)))) &
+    plot_layout(guides='collect', heights = c(0.04, 1)) &  #unit(rep(1, 7), c("cm", rep("null", 6)))) &
     scale_fill_manual(values = c("#d95f02", "#1b9e77")) &
     scale_color_manual(values = c("#d95f02", "#1b9e77")) &
     scale_y_continuous(labels = label_number_si()) &
+    theme_bw(7) +
     theme(
       legend.position = "top", legend.justification = "left",
       text = element_text(color = "black"),
@@ -170,13 +162,7 @@ plot_compare <- function(marginal_custo, marginal_producao, correlacao, titulo) 
 ```
 
 
-```{r}
-#| label: fig-density-var-dependence
-#| fig-width: 7
-#| fig-height: 7
-#| out-width: 100%
-#| dpi: 500
-#| fig-cap: "Distribuição de probabilidade"
+```{r, fig.width=4, fig.height=4, dpi=320}
 
 plot_compare(
   marginal_custo = "sn_pos",

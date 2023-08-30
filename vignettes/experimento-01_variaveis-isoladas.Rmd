@@ -15,6 +15,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 library(vet)
 library(dplyr)
 library(ggplot2)
@@ -107,22 +108,22 @@ vet_curva <- bind_rows(lst_vet_curva) |>
 plt_custo_vet_taxa <- vet_curva |> 
   filter(tipo == "Custo") |> 
   ggplot(aes(valor, vet, color = taxa)) +
-    geom_hline(yintercept = 0, alpha = 0.8) +
+    geom_hline(yintercept = 0, alpha = 0.5, color = "grey10") +
     geom_line(linewidth = 0.7) +
     labs(
       x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
-      y = NULL,
+      y = expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
       color = "Taxa de desconto",
       #tag = "A"
     ) +
     scale_x_continuous(breaks = seq(0, 20000, 3000)) +
-    theme_bw(7) +
+    theme_bw(5) +
     theme(axis.text = element_text(color = "black"))
 
 plt_producao_vet_taxa <- vet_curva |> 
   filter(tipo == "Produção") |> 
   ggplot(aes(valor, vet, color = taxa)) +
-    geom_hline(yintercept = 0, alpha = 0.8) +
+    geom_hline(yintercept = 0, alpha = 0.5, color = "grey10") +
     geom_line(linewidth = 0.7) +
     labs(
       x = expression(Produção~de~madeira~(m^3~ha^-1)),
@@ -131,13 +132,17 @@ plt_producao_vet_taxa <- vet_curva |>
       #tag = "B"
     ) +
     scale_x_continuous(breaks = seq(0, 500, 50)) +
-    theme_bw(7) +
-    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.text.x = element_text(color = "black"))
+    theme_bw(5) +
+    theme(
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(), 
+      axis.text.x = element_text(color = "black")
+    )
 
 plt_preco_vet_taxa <- vet_curva |> 
   filter(tipo == "Preço") |> 
   ggplot(aes(valor, vet, color = taxa)) +
-    geom_hline(yintercept = 0, alpha = 0.8) +
+    geom_hline(yintercept = 0, alpha = 0.5, color = "grey10") +
     geom_line(linewidth = 0.7) +
     labs(
       x = expression(paste("Preço da madeira ", "(R$ ", "m"^"-3", ")")),
@@ -146,21 +151,16 @@ plt_preco_vet_taxa <- vet_curva |>
       #tag = "C"
     ) +
     scale_x_continuous(breaks = seq(0, 500, 30)) +
-    theme_bw(7) +
-    theme(axis.text.y = element_blank(), axis.ticks.y = element_blank(), axis.text.x = element_text(color = "black"))
+    theme_bw(5) +
+    theme(
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(), 
+      axis.text.x = element_text(color = "black")
+    )
 ```
 
-
-```{r}
-#| label: fig-line-var-vet-taxa
-#| fig-width: 5
-#| fig-height: 2
-#| out-width: 100%
-#| dpi: 500
-#| fig-cap: "Relação variável estado e VET"
-#| 
-
-{plt_custo_vet_taxa +
+```{r, fig.width=4, fig.height=2, dpi=320}
+plt_custo_vet_taxa +
   plt_producao_vet_taxa +
   plt_preco_vet_taxa +
   plot_layout(guides = 'collect') &
@@ -171,14 +171,5 @@ plt_preco_vet_taxa <- vet_curva |>
   theme(legend.position = "top", legend.justification = "left", legend.box.spacing = unit(0, "pt")) &
   scale_color_brewer(palette = "Set2") &
   guides(color = guide_legend(override.aes = list(linewidth =2)))
-  } |> 
-  patchworkGrob() |>
-  grid.arrange(
-    left = grid.text(
-      expression(paste("Valor esperado da terra ", "(R$ ", "ha"^"-1", ")")),
-      rot = 90, gp = gpar(fontsize = 8)
-    )
-  )
 ```
-
 

@@ -26,7 +26,7 @@ library(scales)
 ```   
 
 ```{r}
-make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", marginal="norm - norm", tag = NULL) {
+make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", marginal="norm - norm", tag = NULL, base_size) {
   
   tab_custo_producao <- .data |> 
     filter(as.character(vl_correlacao) == corr) |> 
@@ -38,11 +38,11 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
 
   plt_hist_custo <- tab_custo_producao |> 
     ggplot(aes(custo)) +
-      geom_histogram(fill = "black", color = "white", alpha = 0.8) +
+      geom_histogram(fill = "black", alpha = 0.5) +
       labs(x = NULL, y = "Frequência") +
       scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
       scale_y_continuous(breaks = seq(0, 10000, 300), labels = label_number_auto()) +
-      theme_bw() +
+      theme_bw(base_size) +
       theme(
         text = element_text(color = "black"),
         axis.text = element_text(color = "black")
@@ -50,12 +50,12 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
   
   plt_hist_producao <- tab_custo_producao |> 
     ggplot(aes(producao)) +
-      geom_histogram(fill = "black", color = "white", alpha = 0.8) +
+      geom_histogram(fill = "black", alpha = 0.5) +
       coord_flip() +
       labs(x = NULL, y = "Frequência") +
       scale_x_continuous(breaks = seq(40, 500, 50)) +
       scale_y_continuous(breaks = seq(0, 10000, 300), labels = label_number_auto()) +
-      theme_bw() +
+      theme_bw(base_size) +
       theme(
         text = element_text(color = "black"),
         axis.text = element_text(color = "black")
@@ -63,15 +63,15 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
   
   plt_scatter_custo_producao <- tab_custo_producao |> 
     ggplot(aes(custo, producao)) +
-      geom_point(alpha = 0.07) +
-      #geom_smooth(method = "lm") +
+      geom_density_2d(bins = 6, color = "grey20", alpha = 0.5) +
+      geom_point(alpha = 0.02, size = 0.5) +
       labs(
         x = expression(paste("Custo de formação ", "(R$ ", "ha"^"-1", ")")),
         y = expression(Produção~de~madeira~(m^3~ha^-1))
       ) +
       scale_x_continuous(breaks = seq(0, 30000, 3000), labels = label_number_auto()) +
       scale_y_continuous(breaks = seq(40, 500, 50)) +
-      theme_bw() +
+      theme_bw(base_size) +
       theme(
         text = element_text(color = "black"),
         axis.text = element_text(color = "black")
@@ -84,16 +84,10 @@ make_marginal_plot <- function(.data=tab_amostra_dependente, corr="0.7", margina
 
 # Correlação entre marginais
 
-```{r}
-#| label: fig-scatter-marginal-norm-norm
-#| fig-width: 9
-#| fig-height: 4.5
-#| out-width: 100%
-#| dpi: 500
-#| fig-cap: "Distribuição de probabilidade"
+```{r, fig.width=4, fig.height=2, dpi=320}
 
-lst_plt_norm_norm_01 <- make_marginal_plot(corr="0.1", marginal="norm - norm")
-lst_plt_norm_norm_07 <- make_marginal_plot(corr="0.7", marginal="norm - norm")
+lst_plt_norm_norm_01 <- make_marginal_plot(corr="0.1", marginal="norm - norm", base_size = 5)
+lst_plt_norm_norm_07 <- make_marginal_plot(corr="0.7", marginal="norm - norm", base_size = 5)
 
 wrap_plots(
   lst_plt_norm_norm_01[[2]], 
@@ -110,16 +104,10 @@ wrap_plots(
 )
 ```
 
-```{r}
-#| label: fig-scatter-marginal-unif-unif
-#| fig-width: 9
-#| fig-height: 4.5
-#| out-width: 100%
-#| dpi: 500
-#| fig-cap: "Distribuição de probabilidade"
+```{r, fig.width=4, fig.height=2, dpi=320}
 
-lst_plt_norm_norm_01 <- make_marginal_plot(corr="0.1", marginal="unif - unif")
-lst_plt_norm_norm_07 <- make_marginal_plot(corr="0.7", marginal="unif - unif")
+lst_plt_norm_norm_01 <- make_marginal_plot(corr="0.1", marginal="unif - unif", base_size = 5)
+lst_plt_norm_norm_07 <- make_marginal_plot(corr="0.7", marginal="unif - unif", base_size = 5)
 
 wrap_plots(
   lst_plt_norm_norm_01[[2]], 
@@ -169,7 +157,7 @@ plt_density <- tab_plot |>
   scale_x_continuous(breaks = seq(0, 30000, 4000), labels = label_number_auto()) +
   scale_y_continuous(breaks = seq(40, 500, 50)) +
   #scale_fill_viridis_c('Quantil', labels = percent(seq(0.1, 1, 0.1)), guide = guide_colourbar()) +
-  theme_bw() +
+  theme_bw(5) +
   theme(
     text = element_text(color = "black"),
     axis.text = element_text(color = "black"),
@@ -189,20 +177,15 @@ get_legend <- function(a.gplot){
 plt_legend <- {tibble(x = 1:11, y = seq(0, 1, 0.1)) |> 
   ggplot(aes(x, y, color = y)) + 
     geom_point() +
+    theme_bw(5) +
     theme(legend.position = "top", legend.justification = "left", legend.margin=margin(l = 1.65, unit='cm') ) +
-    scale_color_viridis_c("Densidade   ") +
-    guides(color = guide_colorbar(barwidth = 10, barheight = 1, ticks.colour = "black"))
+    scale_color_viridis_c("Densidade") +
+    guides(color = guide_colorbar(barwidth = 5, barheight = 0.5, ticks.colour = "black"))
   } |> 
   get_legend()
 ```
 
-```{r}
-#| label: fig-contour-custo-producao-dist
-#| fig-width: 8
-#| fig-height: 4.5
-#| out-width: 100%
-#| dpi: 500
-#| fig-cap: "Distribuição de probabilidade"
+```{r, fig.width=4, fig.height=2.5, dpi=320}
 
 plot_spacer() +
   plt_legend +
