@@ -122,8 +122,8 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="va">convert_param_skew</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/pkg/sn/man/dp2cp.html" class="external-link">cp2dp</a></span><span class="op">(</span><span class="st">"SN"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/sn/man/dp2cp.html" class="external-link">cp2dp</a></span><span class="op">(</span><span class="st">"SN"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 </div>
@@ -151,7 +151,7 @@
 <span>  skew <span class="op">=</span> <span class="fl">0.7</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab_custo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span><span class="va">tab_custo</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  cd_var <span class="op">=</span> <span class="st">"custo"</span>,</span>
 <span>  nm_var <span class="op">=</span>  <span class="st">"Custo de formação"</span>,</span>
 <span>  cd_distribuicao <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unif"</span>, <span class="st">"norm"</span>, <span class="st">"sn_pos"</span>, <span class="st">"sn_neg"</span><span class="op">)</span>,</span>
@@ -177,10 +177,10 @@
 <span>      <span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_amostra <span class="op">=</span> <span class="fu">ajusta_extremos</span><span class="op">(</span><span class="va">vl_amostra</span>, <span class="va">lst_param_custo</span><span class="op">$</span><span class="va">min</span>, <span class="va">lst_param_custo</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_amostra <span class="op">=</span> <span class="fu">ajusta_extremos</span><span class="op">(</span><span class="va">vl_amostra</span>, <span class="va">lst_param_custo</span><span class="op">$</span><span class="va">min</span>, <span class="va">lst_param_custo</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="produção-de-madeira">Produção de madeira<a class="anchor" aria-label="anchor" href="#produ%C3%A7%C3%A3o-de-madeira"></a>
@@ -196,7 +196,7 @@
 <span>  skew <span class="op">=</span> <span class="fl">0.7</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab_producao</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span><span class="va">tab_producao</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  cd_var <span class="op">=</span> <span class="st">"producao"</span>,</span>
 <span>  nm_var <span class="op">=</span>  <span class="st">"Producao de madeira"</span>,</span>
 <span>  cd_distribuicao <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unif"</span>, <span class="st">"norm"</span>, <span class="st">"sn_pos"</span>, <span class="st">"sn_neg"</span><span class="op">)</span>,</span>
@@ -222,10 +222,10 @@
 <span>      <span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_amostra <span class="op">=</span> <span class="fu">ajusta_extremos</span><span class="op">(</span><span class="va">vl_amostra</span>, <span class="va">lst_param_producao</span><span class="op">$</span><span class="va">min</span>, <span class="va">lst_param_producao</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_amostra <span class="op">=</span> <span class="fu">ajusta_extremos</span><span class="op">(</span><span class="va">vl_amostra</span>, <span class="va">lst_param_producao</span><span class="op">$</span><span class="va">min</span>, <span class="va">lst_param_producao</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="preço-da-madeira">Preço da madeira<a class="anchor" aria-label="anchor" href="#pre%C3%A7o-da-madeira"></a>
@@ -241,7 +241,7 @@
 <span>  skew <span class="op">=</span> <span class="fl">0.7</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab_preco</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span><span class="va">tab_preco</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>  cd_var <span class="op">=</span> <span class="st">"preco"</span>,</span>
 <span>  nm_var <span class="op">=</span>  <span class="st">"Preço da madeira"</span>,</span>
 <span>  cd_distribuicao <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unif"</span>, <span class="st">"norm"</span>, <span class="st">"sn_pos"</span>, <span class="st">"sn_neg"</span><span class="op">)</span>,</span>
@@ -267,12 +267,12 @@
 <span>      <span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_amostra <span class="op">=</span> <span class="fu">ajusta_extremos</span><span class="op">(</span><span class="va">vl_amostra</span>, <span class="va">lst_param_preco</span><span class="op">$</span><span class="va">min</span>, <span class="va">lst_param_preco</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_amostra <span class="op">=</span> <span class="fu">ajusta_extremos</span><span class="op">(</span><span class="va">vl_amostra</span>, <span class="va">lst_param_preco</span><span class="op">$</span><span class="va">min</span>, <span class="va">lst_param_preco</span><span class="op">$</span><span class="va">max</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html" class="external-link">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab_amostra_independente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span><span class="va">tab_amostra_independente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
 <span>  <span class="va">tab_custo</span>,</span>
 <span>  <span class="va">tab_producao</span>,</span>
 <span>  <span class="va">tab_preco</span></span>
@@ -282,7 +282,7 @@
 <h2 id="dependencia-entre-custo-e-produção">Dependencia entre custo e produção<a class="anchor" aria-label="anchor" href="#dependencia-entre-custo-e-produ%C3%A7%C3%A3o"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tab_grid_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html" class="external-link">expand_grid</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">tab_grid_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/expand_grid.html" class="external-link">expand_grid</a></span><span class="op">(</span></span>
 <span>  cd_distribuicao1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unif"</span>, <span class="st">"norm"</span>, <span class="st">"sn_pos"</span>, <span class="st">"sn_neg"</span><span class="op">)</span>,</span>
 <span>  cd_distribuicao2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"unif"</span>, <span class="st">"norm"</span>, <span class="st">"sn_pos"</span>, <span class="st">"sn_neg"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -296,21 +296,21 @@
 <span></span>
 <span><span class="va">vec_corr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.9</span>, <span class="fl">0.2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lst_amostra_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab_grid_copula</span><span class="op">)</span><span class="op">)</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">vec_corr</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">lst_amostra_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map.html" class="external-link">map</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab_grid_copula</span><span class="op">)</span><span class="op">)</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">vec_corr</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab_grid_copula</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
 <span>  <span class="va">i_margins</span> <span class="op">&lt;-</span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">tab_grid_copula</span><span class="op">$</span><span class="va">cd_distribuicao1</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="va">tab_grid_copula</span><span class="op">$</span><span class="va">cd_distribuicao2</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">i_is_skew</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">i_margins</span>, <span class="st">"sn"</span><span class="op">)</span></span>
-<span>  <span class="va">i_is_skew_neg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">i_margins</span>, <span class="st">"sn_neg"</span><span class="op">)</span></span>
+<span>  <span class="va">i_is_skew</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">i_margins</span>, <span class="st">"sn"</span><span class="op">)</span></span>
+<span>  <span class="va">i_is_skew_neg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_detect.html" class="external-link">str_detect</a></span><span class="op">(</span><span class="va">i_margins</span>, <span class="st">"sn_neg"</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="va">i_custo_param</span> <span class="op">&lt;-</span> <span class="va">lst_param_custo</span><span class="op">[</span><span class="va">lst_distribuicao_param</span><span class="op">[[</span><span class="va">i_margins</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="va">i_producao_param</span> <span class="op">&lt;-</span> <span class="va">lst_param_producao</span><span class="op">[</span><span class="va">lst_distribuicao_param</span><span class="op">[[</span><span class="va">i_margins</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">]</span></span>
 <span></span>
 <span>  <span class="va">i_lst_param_margins</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">i_custo_param</span>, <span class="va">i_producao_param</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_if.html" class="external-link">map_if</a></span><span class="op">(</span><span class="va">i_is_skew</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/sn/man/dp2cp.html" class="external-link">cp2dp</a></span><span class="op">(</span><span class="st">"SN"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>    <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_if.html" class="external-link">map_if</a></span><span class="op">(</span><span class="va">i_is_skew_neg</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="va">x</span><span class="op">$</span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">alpha</span> <span class="op">*</span> <span class="op">-</span><span class="fl">1</span>; <span class="va">x</span><span class="op">}</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map_if.html" class="external-link">map_if</a></span><span class="op">(</span><span class="va">i_is_skew</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/sn/man/dp2cp.html" class="external-link">cp2dp</a></span><span class="op">(</span><span class="st">"SN"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map_if.html" class="external-link">map_if</a></span><span class="op">(</span><span class="va">i_is_skew_neg</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="va">x</span><span class="op">$</span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">$</span><span class="va">alpha</span> <span class="op">*</span> <span class="op">-</span><span class="fl">1</span>; <span class="va">x</span><span class="op">}</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">ii</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">vec_corr</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span></span>
@@ -318,7 +318,7 @@
 <span></span>
 <span>    <span class="va">ii_mult_dist_copula</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/copula/man/Mvdc.html" class="external-link">mvdc</a></span><span class="op">(</span></span>
 <span>      copula <span class="op">=</span> <span class="va">ii_copula_normal</span>,</span>
-<span>      margins <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">i_margins</span>, <span class="st">"(_pos)|(_neg)"</span><span class="op">)</span>,</span>
+<span>      margins <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_remove.html" class="external-link">str_remove</a></span><span class="op">(</span><span class="va">i_margins</span>, <span class="st">"(_pos)|(_neg)"</span><span class="op">)</span>,</span>
 <span>      paramMargins <span class="op">=</span> <span class="va">i_lst_param_margins</span></span>
 <span>    <span class="op">)</span></span>
 <span></span>
@@ -329,18 +329,18 @@
 <span></span>
 <span>    <span class="co"># plot(ii_samples[ , 1], ii_samples[ , 2])</span></span>
 <span></span>
-<span>    <span class="va">lst_amostra_dependente</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
-<span>      <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>    <span class="va">lst_amostra_dependente</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">ii</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>        cd_var <span class="op">=</span> <span class="st">"custo"</span>,</span>
 <span>        nm_var <span class="op">=</span> <span class="st">"Custo de formação"</span>,</span>
-<span>        cd_marginais <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{i_margins[1]} - {i_margins[2]}"</span><span class="op">)</span>,</span>
+<span>        cd_marginais <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{i_margins[1]} - {i_margins[2]}"</span><span class="op">)</span>,</span>
 <span>        vl_correlacao <span class="op">=</span> <span class="va">vec_corr</span><span class="op">[</span><span class="va">ii</span><span class="op">]</span>,</span>
 <span>        vl_amostra <span class="op">=</span> <span class="va">ii_custo</span></span>
 <span>      <span class="op">)</span>,</span>
-<span>      <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html" class="external-link">tibble</a></span><span class="op">(</span></span>
 <span>        cd_var <span class="op">=</span> <span class="st">"producao"</span>,</span>
 <span>        nm_var <span class="op">=</span> <span class="st">"Producao de madeira"</span>,</span>
-<span>        cd_marginais <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{i_margins[1]} - {i_margins[2]}"</span><span class="op">)</span>,</span>
+<span>        cd_marginais <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/stringr/man/str_glue.html" class="external-link">str_glue</a></span><span class="op">(</span><span class="st">"{i_margins[1]} - {i_margins[2]}"</span><span class="op">)</span>,</span>
 <span>        vl_correlacao <span class="op">=</span> <span class="va">vec_corr</span><span class="op">[</span><span class="va">ii</span><span class="op">]</span>,</span>
 <span>        vl_amostra <span class="op">=</span> <span class="va">ii_producao</span></span>
 <span>      <span class="op">)</span></span>
@@ -349,7 +349,7 @@
 <span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">tab_amostra_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">lst_amostra_dependente</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">tab_amostra_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span><span class="va">lst_amostra_dependente</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="valor-esperado-da-terra">Valor esperado da terra<a class="anchor" aria-label="anchor" href="#valor-esperado-da-terra"></a>
@@ -359,16 +359,16 @@
 </h3>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vec_aux_dist</span> <span class="op">&lt;-</span> <span class="va">tab_amostra_independente</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">cd_distribuicao</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab_grid_independente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html" class="external-link">expand_grid</a></span><span class="op">(</span></span>
+<span><span class="va">tab_grid_independente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/expand_grid.html" class="external-link">expand_grid</a></span><span class="op">(</span></span>
 <span>  custo <span class="op">=</span> <span class="va">vec_aux_dist</span>,</span>
 <span>  producao <span class="op">=</span> <span class="va">vec_aux_dist</span>,</span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lst_vet_independente</span> <span class="op">&lt;-</span> <span class="va">tab_grid_independente</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_vet <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="va">lst_vet_independente</span> <span class="op">&lt;-</span> <span class="va">tab_grid_independente</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_vet <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">i</span> <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab_grid_independente</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -377,17 +377,17 @@
 <span>      taxa <span class="op">=</span> <span class="va">TAXA</span>,</span>
 <span>      rotacao <span class="op">=</span> <span class="va">ROTACAO</span>,</span>
 <span>      vp_custo <span class="op">=</span> <span class="va">tab_amostra_independente</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cd_var</span> <span class="op">==</span> <span class="st">"custo"</span>, <span class="va">cd_distribuicao</span> <span class="op">==</span> <span class="va">tab_grid_independente</span><span class="op">$</span><span class="va">custo</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cd_var</span> <span class="op">==</span> <span class="st">"custo"</span>, <span class="va">cd_distribuicao</span> <span class="op">==</span> <span class="va">tab_grid_independente</span><span class="op">$</span><span class="va">custo</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
 <span>      producao <span class="op">=</span> <span class="va">tab_amostra_independente</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cd_var</span> <span class="op">==</span> <span class="st">"producao"</span>, <span class="va">cd_distribuicao</span> <span class="op">==</span> <span class="va">tab_grid_independente</span><span class="op">$</span><span class="va">producao</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">cd_var</span> <span class="op">==</span> <span class="st">"producao"</span>, <span class="va">cd_distribuicao</span> <span class="op">==</span> <span class="va">tab_grid_independente</span><span class="op">$</span><span class="va">producao</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
 <span>      preco_madeira <span class="op">=</span> <span class="va">PRECO</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">tab_vet_independente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">lst_vet_independente</span>, <span class="va">vl_vet</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">tab_vet_independente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">lst_vet_independente</span>, <span class="va">vl_vet</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="variáveis-dependentes">Variáveis dependentes<a class="anchor" aria-label="anchor" href="#vari%C3%A1veis-dependentes"></a>
@@ -395,15 +395,15 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vec_aux_corr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"0.1"</span>, <span class="st">"0.3"</span>, <span class="st">"0.5"</span>, <span class="st">"0.7"</span>, <span class="st">"0.9"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tab_grid_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html" class="external-link">expand_grid</a></span><span class="op">(</span></span>
+<span><span class="va">tab_grid_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/expand_grid.html" class="external-link">expand_grid</a></span><span class="op">(</span></span>
 <span>    custo <span class="op">=</span> <span class="va">vec_aux_dist</span>,</span>
 <span>    producao <span class="op">=</span> <span class="va">vec_aux_dist</span>,</span>
 <span>    vl_correlacao <span class="op">=</span> <span class="va">vec_aux_corr</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cd_marginais <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">custo</span>, <span class="va">producao</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>cd_marginais <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">custo</span>, <span class="va">producao</span>, sep <span class="op">=</span> <span class="st">" - "</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lst_vet_dependente</span> <span class="op">&lt;-</span> <span class="va">tab_grid_dependente</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_vet <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="va">lst_vet_dependente</span> <span class="op">&lt;-</span> <span class="va">tab_grid_dependente</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>vl_vet <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">i</span> <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">tab_grid_dependente</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -412,45 +412,45 @@
 <span>      taxa <span class="op">=</span> <span class="va">TAXA</span>,</span>
 <span>      rotacao <span class="op">=</span> <span class="va">ROTACAO</span>,</span>
 <span>      vp_custo <span class="op">=</span> <span class="va">tab_amostra_dependente</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>          <span class="va">cd_var</span> <span class="op">==</span> <span class="st">"custo"</span>,</span>
 <span>          <span class="va">cd_marginais</span> <span class="op">==</span> <span class="va">tab_grid_dependente</span><span class="op">$</span><span class="va">cd_marginais</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">vl_correlacao</span><span class="op">)</span> <span class="op">==</span> <span class="va">tab_grid_dependente</span><span class="op">$</span><span class="va">vl_correlacao</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span>        <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
 <span>      producao <span class="op">=</span> <span class="va">tab_amostra_dependente</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/filter.html" class="external-link">filter</a></span><span class="op">(</span></span>
 <span>          <span class="va">cd_var</span> <span class="op">==</span> <span class="st">"producao"</span>,</span>
 <span>          <span class="va">cd_marginais</span> <span class="op">==</span> <span class="va">tab_grid_dependente</span><span class="op">$</span><span class="va">cd_marginais</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">vl_correlacao</span><span class="op">)</span> <span class="op">==</span> <span class="va">tab_grid_dependente</span><span class="op">$</span><span class="va">vl_correlacao</span><span class="op">[</span><span class="va">i</span><span class="op">]</span></span>
 <span>        <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
+<span>        <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">vl_amostra</span><span class="op">)</span>,</span>
 <span>      preco_madeira <span class="op">=</span> <span class="va">PRECO</span></span>
 <span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">tab_vet_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">lst_vet_dependente</span>, <span class="va">vl_vet</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">tab_vet_dependente</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyr/man/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">lst_vet_dependente</span>, <span class="va">vl_vet</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tab_amostra_vet_completo</span> <span class="op">&lt;-</span> <span class="va">tab_grid_dependente</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="va">tab_vet_dependente</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">cd_marginais</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_nest.html" class="external-link">group_nest</a></span><span class="op">(</span><span class="va">custo</span>, <span class="va">producao</span>, <span class="va">vl_correlacao</span>, .key <span class="op">=</span> <span class="st">"data_dependente"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">cd_marginais</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_nest.html" class="external-link">group_nest</a></span><span class="op">(</span><span class="va">custo</span>, <span class="va">producao</span>, <span class="va">vl_correlacao</span>, .key <span class="op">=</span> <span class="st">"data_dependente"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span></span>
 <span>    <span class="va">tab_vet_independente</span> <span class="op">|&gt;</span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_nest.html" class="external-link">group_nest</a></span><span class="op">(</span><span class="va">custo</span>, <span class="va">producao</span>, .key <span class="op">=</span> <span class="st">"data_independente"</span><span class="op">)</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/group_nest.html" class="external-link">group_nest</a></span><span class="op">(</span><span class="va">custo</span>, <span class="va">producao</span>, .key <span class="op">=</span> <span class="st">"data_independente"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
-<span>    ks_test <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">data_dependente</span>, <span class="va">data_independente</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">vl_vet</span>, <span class="va">.y</span><span class="op">$</span><span class="va">vl_vet</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>    ks_pvalue <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">ks_test</span>,<span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/mutate.html" class="external-link">mutate</a></span><span class="op">(</span></span>
+<span>    ks_test <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map2.html" class="external-link">map2</a></span><span class="op">(</span><span class="va">data_dependente</span>, <span class="va">data_independente</span>, <span class="op">~</span><span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html" class="external-link">ks.test</a></span><span class="op">(</span><span class="va">.x</span><span class="op">$</span><span class="va">vl_vet</span>, <span class="va">.y</span><span class="op">$</span><span class="va">vl_vet</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    ks_pvalue <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">ks_test</span>,<span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span>,</span>
 <span>    pvalue_sig <span class="op">=</span> <span class="va">ks_pvalue</span> <span class="op">&gt;</span> <span class="fl">0.05</span>,</span>
-<span>    d <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">ks_test</span>,<span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span></span>
+<span>    d <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/purrr/man/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">ks_test</span>,<span class="op">~</span><span class="va">.x</span><span class="op">$</span><span class="va">statistic</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">tab_amostra_vet</span> <span class="op">&lt;-</span> <span class="va">tab_amostra_vet_completo</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">data_dependente</span>, <span class="op">-</span><span class="va">data_independente</span>, <span class="op">-</span><span class="va">ks_test</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">data_dependente</span>, <span class="op">-</span><span class="va">data_independente</span>, <span class="op">-</span><span class="va">ks_test</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
